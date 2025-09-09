@@ -1,9 +1,8 @@
-const loadCategories = () =>{
-    fetch("https://openapi.programming-hero.com/api/categories")
-    .then((res)=> res.json())
-    .then((json)=>
-        displayCategory(json.categories)
-    );
+const loadCategories = async () =>{
+    const res = await fetch("https://openapi.programming-hero.com/api/categories")
+    const data = await res.json();
+        displayCategory(data.categories)
+    
 }
 
 const removeActive = () =>{
@@ -12,37 +11,60 @@ const removeActive = () =>{
 };
 
 
-const loadTrees = (id) => {
+const loadTrees = async(id) => {
     const url = `https://openapi.programming-hero.com/api/category/${id}`
-    fetch(url)
-    .then((res)=> res.json())
-    .then((data)=> {
+    const res = await fetch(url)
+    const data = await res.json()
         removeActive();
         const clickedBtn = document.getElementById(`category-${id}`)
         clickedBtn.classList.add("active")
-       displayTrees(data.plants)}
-    );
-}
+       displayTrees(data.plants)
+    }
+    
 
-const loadAllTrees = () => {
+
+const loadAllTrees = async() => {
     const url = "https://openapi.programming-hero.com/api/plants"
-    fetch(url)
-    .then((res)=> res.json())
-    .then((data)=> {
+    const res = await fetch(url);
+    const data = await res.json();
         removeActive();
         const clickedAllbtn = document.getElementById("category-all")
         clickedAllbtn.classList.add("active")
         displayTrees(data.plants)
-    })
+    }
     
+const addToCart = async (id) =>{
+    const url = `https://openapi.programming-hero.com/api/plant/${id}`
+    const res = await fetch(url)
+    const data = await res.json()
+
+    let totalPrice = 0;
+
+    const allPrice = document.getElementById("cart-container")
+
+        const priceDiv = document.createElement("div");
+        
+        priceDiv.innerHTML = `
+                <div class="addToCart bg-[#F0FDF4] rounded-lg mx-2 py-2 px-4 flex justify-between items-center">
+                  <div class="flex flex-col gap-2 font-semibold text-base text-left">
+                  <h3>${data.plants.name}</h3>
+                  <p class="text-[#577094] text-sm font-normal">৳${data.plants.price} × 1</p>
+                  </div>
+                  <i class="fa-solid fa-xmark"></i>
+                </div>
+        `;
+        allPrice.append(priceDiv);
 }
+
+
+    
+
 
 const displayTrees = (trees) => {
     const allTree = document.getElementById("tree-container")
     allTree.innerHTML = "";
 
     for(let tree of trees){
-        console.log(tree)
         const treeDiv = document.createElement("div");
         
         treeDiv.innerHTML = `
@@ -54,7 +76,7 @@ const displayTrees = (trees) => {
                     <h3 class="text-sm bg-[#DCFCE7] rounded-xl p-1 text-[#15803D]">${tree.category}</h3>
                     <h3 class="font-semibold">৳${tree.price}</h3>
                    </div>  
-                   <button class="bg-[#15803D] text-white text-base font-medium w-full rounded-3xl py-1">Add to Cart</button>
+                   <button onclick="addToCart(${tree.id})" class="bg-[#15803D] text-white text-base font-medium w-full rounded-3xl py-1">Add to Cart</button>
                    </div>
         `;
         allTree.append(treeDiv);
@@ -83,5 +105,5 @@ const displayCategory = (categories) => {
     }
 }
 
-loadAllTrees()
+loadAllTrees();
 loadCategories();
