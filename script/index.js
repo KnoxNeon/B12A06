@@ -12,6 +12,7 @@ const removeActive = () =>{
 
 
 const loadTrees = async(id) => {
+    
     const url = `https://openapi.programming-hero.com/api/category/${id}`
     const res = await fetch(url)
     const data = await res.json()
@@ -21,9 +22,8 @@ const loadTrees = async(id) => {
        displayTrees(data.plants)
     }
     
-
-
 const loadAllTrees = async() => {
+    
     const url = "https://openapi.programming-hero.com/api/plants"
     const res = await fetch(url);
     const data = await res.json();
@@ -32,6 +32,30 @@ const loadAllTrees = async() => {
         clickedAllbtn.classList.add("active")
         displayTrees(data.plants)
     }
+
+const loadTreeDetails = async (id) => {
+     const url = `https://openapi.programming-hero.com/api/plant/${id}`
+    const res = await fetch(url);
+    const data = await res.json();
+    
+    displayDetails(data.plants)
+}
+
+const displayDetails = (detail) => {
+    console.log(detail)
+    const detailsContainer = document.getElementById("details-container");
+    detailsContainer.innerHTML = `
+             <div class="space-y-2">
+                <h2 class="font-bold text-xl">${detail.name}</h2>
+                <img class="object-cover w-[500px] h-[300px] rounded-xl" src="${detail.image}" alt="">
+                <h3 class="text-sm"><span class="font-bold text-sm">Category:</span> ${detail.category}</h3>
+                <h3 class="text-sm"><span class="font-bold text-sm">Price:</span> ৳${detail.price}</h3>
+                <p class="text-sm"><span class="font-bold text-sm">Description:</span> ${detail.description}</p>
+              </div>
+    `
+    document.getElementById("tree_modal").showModal();
+  
+}
 
 let totalPrice = 0;
 
@@ -79,10 +103,10 @@ const displayTrees = (trees) => {
         const treeDiv = document.createElement("div");
         
         treeDiv.innerHTML = `
-        <div class="card p-5 bg-white space-y-3 min-h-[480px] plants mx-auto justify-center space-x-5 ">
+        <div class="card p-2 md:p-5 bg-white space-y-3 h-auto plants  md:space-x-5 ">
         <img src="${tree.image}" class="w-full h-50 rounded-lg md:object-cover" alt="">
-                   <h3 class="text-base font-semibold text-left">${tree.name}</h3>
-                   <p class="text-sm opacity-80 text-left">${tree.description}</p>
+                   <h3 onclick="loadTreeDetails(${tree.id})" class="text-base font-semibold text-left cursor-pointer">${tree.name}</h3>
+                   <p class=" text-ellipsis text-sm opacity-80 text-left">${tree.description}</p>
                    <div class="flex justify-between">
                     <h3 class="text-sm bg-[#DCFCE7] rounded-xl p-1 text-[#15803D]">${tree.category}</h3>
                     <h3 class="font-semibold">৳${tree.price}</h3>
@@ -91,7 +115,8 @@ const displayTrees = (trees) => {
                    </div>
         `;
         allTree.append(treeDiv);
-    }
+    };
+    
 }
 
 
