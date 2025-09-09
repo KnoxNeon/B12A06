@@ -101,7 +101,7 @@ const displayCategory = (categories) => {
 
     const allBtn = document.createElement("div");
     allBtn.innerHTML = `
-         <button id="category-all"  onclick="loadAllTrees()" class="bg-white active w-full grid justify-center md:justify-start md:ml-5 p-1 text-left font-medium text-base rounded-md category-btn cursor-pointer">All Plants</button>
+         <button id="category-all"  onclick="loadAllTrees()" class="active w-full grid justify-center md:justify-start md:ml-5 p-1 text-left font-medium text-base rounded-md category-btn cursor-pointer">All Plants</button>
     `;
     categoryContainer.append(allBtn);
 
@@ -110,7 +110,7 @@ const displayCategory = (categories) => {
         
         catDiv.innerHTML = `
         
-        <button id="category-${category.id}" onclick="loadTrees(${category.id})" class="bg-white  w-full grid justify-center md:justify-start md:ml-5 p-1 text-left font-medium text-base rounded-md category-btn cursor-pointer">${category.category_name}s</button>
+        <button id="category-${category.id}" onclick="loadTrees(${category.id})" class="  w-full grid justify-center md:justify-start md:ml-5 p-1 text-left font-medium text-base rounded-md category-btn cursor-pointer">${category.category_name}s</button>
         `;
         categoryContainer.append(catDiv);
     }
